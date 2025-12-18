@@ -1,0 +1,179 @@
+// main.dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+    );
+  }
+}
+
+// الصفحة الرئيسية
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF1D2671), Color(0xFF0F2027)],
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.menu_book, size: 90, color: Colors.white),
+              const SizedBox(height: 20),
+              const Text(
+                'الأذكار اليومية',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 50),
+
+              // زر أذكار الصباح
+              mainButton(
+                text: 'أذكار الصباح',
+                icon: Icons.wb_sunny,
+                color: Colors.orange,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const AzkarPage(
+                        title: 'أذكار الصباح',
+                        azkarList: morningAzkar,
+                      ),
+                    ),
+                  );
+                },
+              ),
+
+              const SizedBox(height: 20),
+
+              // زر أذكار المساء
+              mainButton(
+                text: 'أذكار المساء',
+                icon: Icons.nights_stay,
+                color: Colors.indigo,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const AzkarPage(
+                        title: 'أذكار المساء',
+                        azkarList: eveningAzkar,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// زرار رئيسي
+Widget mainButton({
+  required String text,
+  required IconData icon,
+  required Color color,
+  required VoidCallback onTap,
+}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 30),
+    child: ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        minimumSize: const Size(double.infinity, 60),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+        ),
+      ),
+      onPressed: onTap,
+      icon: Icon(icon, color: Colors.white),
+      label: Text(
+        text,
+        style: const TextStyle(fontSize: 20, color: Colors.white),
+      ),
+    ),
+  );
+}
+
+// صفحة الأذكار
+class AzkarPage extends StatelessWidget {
+  final String title;
+  final List<String> azkarList;
+
+  const AzkarPage({
+    super.key,
+    required this.title,
+    required this.azkarList,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: Colors.teal,
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: azkarList.length,
+        itemBuilder: (context, index) {
+          return Card(
+            elevation: 4,
+            margin: const EdgeInsets.only(bottom: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                azkarList[index],
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 18, height: 1.6),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// بيانات الأذكار
+const List<String> morningAzkar = [
+  'أصبحنا وأصبح الملك لله والحمد لله...',
+  'اللهم بك أصبحنا وبك أمسينا وبك نحيا وبك نموت...',
+  'رضيت بالله ربًا وبالإسلام دينًا وبمحمد ﷺ نبيًا.',
+  'اللهم إني أسألك خير هذا اليوم فتحه ونصره ونوره.',
+];
+
+const List<String> eveningAzkar = [
+  'أمسينا وأمسى الملك لله والحمد لله...',
+  'اللهم بك أمسينا وبك أصبحنا وبك نحيا وبك نموت...',
+  'اللهم إني أسألك خير هذه الليلة وفتحها ونصرها.',
+  'أعوذ بكلمات الله التامات من شر ما خلق.',
+];
